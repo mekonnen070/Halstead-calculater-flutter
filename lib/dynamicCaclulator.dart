@@ -1,5 +1,6 @@
 import 'package:animated_button/animated_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:halstead_calculator_for_metrics_group_work/HalsteadCalcProvider.dart';
 import 'package:halstead_calculator_for_metrics_group_work/OutputPage.dart';
 import 'package:halstead_calculator_for_metrics_group_work/main.dart';
@@ -27,6 +28,10 @@ class _DynamicCalculatorState extends State<DynamicCalculator> {
     provider = Provider.of<HalsteadCalcProvider>(context, listen: false);
   }
 
+  final _key = GlobalKey();
+
+  bool calculatPressed = false;
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -45,6 +50,19 @@ class _DynamicCalculatorState extends State<DynamicCalculator> {
             ),
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: IconButton(
+              icon: const Icon(
+                Icons.refresh_outlined,
+              ),
+              onPressed: () {
+                Phoenix.rebirth(context);
+              },
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -52,7 +70,7 @@ class _DynamicCalculatorState extends State<DynamicCalculator> {
           child: Column(
             children: [
               const Text(
-                'Please input the code here:',
+                ' Be sure to have an internet connection.\n Please input the code here:',
                 style: TextStyle(color: Colors.black, fontSize: 20),
               ),
               const SizedBox(height: 10),
@@ -76,6 +94,9 @@ class _DynamicCalculatorState extends State<DynamicCalculator> {
                 width: width! * 0.40,
                 onPressed: () {
                   provider!.dynamicCaclulatorMethod(_controller!.text);
+                  setState(() {
+                    calculatPressed = true;
+                  });
                 },
                 child: const Text(
                   'Calculate',
@@ -86,7 +107,13 @@ class _DynamicCalculatorState extends State<DynamicCalculator> {
                   ),
                 ),
               ),
-              const OutputScreen()
+              const SizedBox(
+                height: 25,
+              ),
+              if (_controller!.text.isNotEmpty && calculatPressed == true)
+                !provider!.allAreNotNull
+                    ? const CircularProgressIndicator.adaptive()
+                    : OutputScreen(key: _key),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import 'dart:math' as math;
 
@@ -15,42 +16,50 @@ class HalsteadCalcProvider extends ChangeNotifier {
   double? n2;
   double? N2;
 
-  dynamicCaclulatorMethod(var code) async {
-    var response = await _halstead.dynamicallyPoster(code);
-    print(response.data);
-    n1 = response.data['operators'].length.toDouble();
-    n2 = response.data['operands'].length.toDouble();
+  dynamicCaclulatorMethod(String code) async {
+    if (code.isNotEmpty) {
+      var response = await _halstead.dynamicallyPoster(code);
+      // print(response.data);
+      if (response.statusCode == 200) {
+        n1 = response.data['operators'].length.toDouble();
+        n2 = response.data['operands'].length.toDouble();
 
 // total operators
-    double opratorsSum = 0;
-    for (int counter = 0;
-        counter < response.data['operators'].length;
-        counter++) {
-      opratorsSum += (response.data['operators'][counter])['counter'];
-    }
+        double opratorsSum = 0;
+        for (int counter = 0;
+            counter < response.data['operators'].length;
+            counter++) {
+          opratorsSum += (response.data['operators'][counter])['counter'];
+        }
 
 // Total operands
-    double operandsSum = 0;
-    for (int counter = 0;
-        counter < response.data['operands'].length;
-        counter++) {
-      operandsSum += (response.data['operands'][counter])['counter'];
+        double operandsSum = 0;
+        for (int counter = 0;
+            counter < response.data['operands'].length;
+            counter++) {
+          operandsSum += (response.data['operands'][counter])['counter'];
+        }
+
+        N1 = opratorsSum.toDouble();
+        N2 = operandsSum.toDouble();
+
+        outPutCalculator();
+        return true;
+      } else {
+        return false;
+      }
     }
-
-    N1 = opratorsSum.toDouble();
-    N2 = operandsSum.toDouble();
-
-    outPutCalculator();
   }
 
+  bool allAreNotNull = false;
   bool _isvalidated = false;
   get isvalidated => _isvalidated;
 
   isvalidatedSetter(bool isvalidated) {
     _isvalidated = isvalidated;
-    outPutCalculator();
     notifyListeners();
   }
+  // outPutCalculator();
 
   void setInputValues(
       {required double n1,
@@ -61,6 +70,7 @@ class HalsteadCalcProvider extends ChangeNotifier {
     this.N1 = N1;
     this.n2 = n2;
     this.N2 = N2;
+    outPutCalculator();
   }
 
   double? programLength;
@@ -81,6 +91,9 @@ class HalsteadCalcProvider extends ChangeNotifier {
     programEffort = programVolume! / programLevel!;
     programmingTime = programEffort! / 18;
     programmingBugs = math.pow(programEffort!, (2 / 3)) / 300;
+    allAreNotNull = true;
+    print(allAreNotNull);
+    notifyListeners();
   }
 
   @override

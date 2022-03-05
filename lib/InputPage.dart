@@ -292,8 +292,13 @@ class _InputScreenState extends State<InputScreen> {
             bool _allValidated = _formKey.currentState!.validate();
             if (_allValidated) {
               halsProvider.isvalidatedSetter(true);
+              _formKey.currentState!.save();
+              halsProvider.setInputValues(
+                  n1: double.parse(_n1Controller.text),
+                  N1: double.parse(_N1Controller.text),
+                  n2: double.parse(_n2Controller.text),
+                  N2: double.parse(_N2Controller.text));
             }
-            _formKey.currentState!.save();
           },
         ),
       ),
