@@ -144,14 +144,4 @@ class _OutputScreenState extends State<OutputScreen> {
       ],
     );
   }
-
-  // Future outPutCalculator(HalsteadCalcProvider halsProvider) async {
-  //   double? n1 = halsProvider.n1;
-  //   double? N1 = halsProvider.N1;
-  //   double? n2 = halsProvider.n2;
-  //   double N2 = halsProvider.N2!;
-  //   setState(() {
-  //     programLength = n1! + n2!;
-  //   });
-  // }
 }

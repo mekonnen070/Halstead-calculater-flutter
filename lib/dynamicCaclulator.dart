@@ -28,8 +28,6 @@ class _DynamicCalculatorState extends State<DynamicCalculator> {
     provider = Provider.of<HalsteadCalcProvider>(context, listen: false);
   }
 
-  final _key = GlobalKey();
-
   bool calculatPressed = false;
 
   @override
@@ -107,13 +105,11 @@ class _DynamicCalculatorState extends State<DynamicCalculator> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 25,
-              ),
+              const SizedBox(height: 25),
               if (_controller!.text.isNotEmpty && calculatPressed == true)
-                !provider!.allAreNotNull
+                provider!.programVocabulary == 0
                     ? const CircularProgressIndicator.adaptive()
-                    : OutputScreen(key: _key),
+                    : const OutputScreen()
             ],
           ),
         ),

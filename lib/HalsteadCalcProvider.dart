@@ -49,6 +49,7 @@ class HalsteadCalcProvider extends ChangeNotifier {
         return false;
       }
     }
+    notifyListeners();
   }
 
   bool allAreNotNull = false;
@@ -92,7 +93,6 @@ class HalsteadCalcProvider extends ChangeNotifier {
     programmingTime = programEffort! / 18;
     programmingBugs = math.pow(programEffort!, (2 / 3)) / 300;
     allAreNotNull = true;
-    print(allAreNotNull);
     notifyListeners();
   }
 
